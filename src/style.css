@@ -1,0 +1,48 @@
+/* tailwind imports */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Reset default styles */
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+
+/* Add your custom styles here */
+
+#frame {
+    height: 100vh;
+	width: 100%;
+	overflow: auto;
+}
+
+.background {
+	position: sticky;
+	width: 100%;
+    height: 80vh;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+
+.caption {
+	box-sizing: border-box;
+	width: calc(100% - 40px);
+	max-width: 400px;
+	margin: auto auto 80vh 5vw;
+	color: rgb(203 213 225);
+    transition: color 0.25s;
+	height: 100vh;
+}
+
+.caption:first-child{
+    top:0px;
+}
+
+.caption.active {
+	color: rgb(100 116 139);
+}
