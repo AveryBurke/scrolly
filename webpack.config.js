@@ -3,8 +3,11 @@ import { fileURLToPath } from "url";
 import "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
+import TerserWebpackPlugin from "terser-webpack-plugin";
 
-const devMode = process.env.NODE_ENV !== "production";
+// const devMode = process.env.NODE_ENV !== "production";
+const devMode = false;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -21,7 +24,7 @@ const config = {
 				use: "ts-loader",
 				exclude: /node_modules/,
 			},
-			{ test: /\.(sa|sc|c)ss$/i, use: [devMode ? "style-loader" : MiniCssExtractPlugin.loader, "css-loader", "postcss-loader"] },
+			{ test: /\.(sa|sc|c)ss$/i, use: [(devMode ? "style-loader" : MiniCssExtractPlugin.loader), "css-loader", "postcss-loader"] },
 		],
 	},
 	resolve: {
@@ -45,6 +48,9 @@ const config = {
 			template: "src/index.html",
 		}),
 	].concat(devMode ? [] : [new MiniCssExtractPlugin({ filename: "bundle.css" })]),
+	optimization: {
+		minimizer: [new CssMinimizerPlugin(), new TerserWebpackPlugin()],
+	},
 };
 
 export default config;

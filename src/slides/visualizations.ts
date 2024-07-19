@@ -1,17 +1,10 @@
 import { barChart } from "../visulizations/barChart";
 import { Selection } from "d3-selection";
+import { pizzaChart } from "../visulizations/pizzaChart";
 
-type Chart = "barChart" | "growingCircle";
-
-interface Visulization {
-	mounted: boolean;
-	generator: typeof barChart;
-	chart: ReturnType<typeof barChart> | null;
-	init: (selection: Selection<SVGElement, number[], any, any>, data: number[], fillColor: string, width: number, height: number, padding: number) => void;
-}
-
-export const visulizations: { [key in Chart]: Visulization } = {
+export const visulizations: Visulizations = {
 	barChart: {
+		name: "barChart",
 		mounted: false,
 		generator: barChart,
 		chart: null,
@@ -26,6 +19,7 @@ export const visulizations: { [key in Chart]: Visulization } = {
 		},
 	},
 	growingCircle: {
+		name: "growingCircle",
 		mounted: false,
 		generator: barChart,
 		chart: null,
@@ -36,6 +30,30 @@ export const visulizations: { [key in Chart]: Visulization } = {
 			this.chart.width(width);
 			this.chart.height(height);
 			this.chart.padding(padding);
+			setTimeout(() => {
+				selection.call(this.chart);
+			}, 250);
+		},
+	},
+	pizzaChart: {
+		name: "pizzaChart",
+		generator: pizzaChart,
+		mounted: false,
+		chart: null,
+		init(
+			selection: Selection<SVGElement, any[], HTMLElement, any>,
+			data: any[],
+			ringColumn: string,
+			ringSet: string[],
+			sliceColumn: string,
+			sliceSet: string[]
+		) {
+			this.chart = this.generator();
+			this.chart.data(data);
+			this.chart.ringColumn(ringColumn);
+			this.chart.ringSet(ringSet);
+			this.chart.sliceColumn(sliceColumn);
+			this.chart.sliceSet(sliceSet);
 			selection.call(this.chart);
 		},
 	},

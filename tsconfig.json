@@ -4,9 +4,10 @@
 		"outDir": "./dist/",
 		"noImplicitAny": true,
 		"module": "ESNext",
-		"target": "es6",
+		"target": "ESNext",
 		"jsx": "react",
 		"allowJs": true,
-		"moduleResolution": "node"
+		"moduleResolution": "node",
+		"paths": {"*": ["./node_modules/*", "./custom-types/*.ts"]}, 
 	}
 }
