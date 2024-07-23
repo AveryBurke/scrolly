@@ -5,9 +5,79 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	</head>
 	<body>
-		<div class="title z-20 drop-shadow-sm">
-			<h1 class="text-4xl text-slate-600">A Simple Example of a Scrolling Visualization</h1>
-			<p class="text-sm text-slate-400">This page demonstrates how to create a scrolling visualization using D3.js and ScrollMagic</p>
+		<!-- introduction -->
+		<div class="relative h-[100vh] -z-10">
+			<div class="fixed flex flex-col justify-center items-center z-0 gap-2 bg-sky-50 h-full w-full">
+				<h1 class="text-4xl text-sky-600">Welcome to the D3.js Scrolling Visualization</h1>
+				<p class="text-sm text-sky-400">This is a simple example of a D3.js visualization that updates based on scrolling behavior</p>
+			</div>
+			<!-- svg or canvas will go behind the title-->
+		</div>
+		<!-- intro paragraph -->
+		<div class="relative z-20 bg-white px-32 pb-0 pt-24 mb-0 box-border">
+			<p class="block leading-5 text-sm text-slate-600">
+				This is a simple example of a D3.js visualization that updates based on scrolling behavior. The user's scrolling behavior controls the chart's actions
+				through update methods. These methods can change the height and color of the bars or modify the chart's data. While this section of text is visible,
+				scrolling controls the chart's height.
+			</p>
+		</div>
+		<!--main-->
+		<div class="relative my-0 z-20 pb-64 bg-white">
+			<div class="relative z-30 pt-1 pr-0 pl-3 w-full max-w-[calc((110px +(100% - 110px)* 0.5) +(100vh - 45px)* 926 / 665)]">
+				<!-- topics: a guid along the side of the page to highleght which top is currentlly in view-->
+				<div class="w-1/4 top-1 relative inline-block z-20" id="sections">
+					<section class="step mt-64 pl-1 opacity-0" data-id="barChart">
+						<p class="block leading-5 text-sm text-slate-600">
+							The bar chart on the right is a simple example of an updatable D3.js visualization. The user's scrolling behavior controls this chart's actions
+							through update methods. These methods can change the height and color of the bars or modify the chart's data. While this section of text is
+							visible, scrolling controls the chart's height.
+						</p>
+					</section>
+					<section class="step mt-40 pl-1 opacity-0" data-id="1">
+						<p class="block leading-5 text-sm text-slate-600">
+							When entered, each section's controller updates the chart's data and the color of the bars. If you entered this section from above, the section
+							controller updated the chart's data and color. If you entered this section from below, the current section's controller initialized a new bar
+							chart and attached it to the SVG on the right, and the controller from the section above will modify this chart. If you leave this section by
+							scrolling up, the section controller will clean up and remove the bar chart.
+						</p>
+					</section>
+					<section class="step mt-40 pl-1 opacity-0" data-id="2">
+						<p class="block leading-5 text-sm text-slate-600">
+							Donec commodo sapien enim, et iaculis neque sollicitudin iaculis. Etiam consequat suscipit quam, a blandit mauris pharetra accumsan. Integer
+							dignissim gravida rutrum. Nulla facilisi. Sed vitae convallis enim. Mauris et vehicula ex. Aliquam mauris tellus, tempor quis ante ac, rutrum
+							semper libero. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Cras et urna eget elit rhoncus pharetra.
+							Cras volutpat dui nec iaculis tincidunt. Maecenas malesuada libero sed porta tincidunt.
+						</p>
+					</section>
+					<section class="step mt-40 pl-1 opacity-0" data-id="3">
+						<p class="block leading-5 text-sm text-slate-600">
+							Suspendisse varius odio enim, eget vehicula odio placerat at. Aenean suscipit purus nulla, ac faucibus ex semper a. Nulla leo ante, ultrices vitae
+							viverra sed, semper nec eros. Phasellus id facilisis est, et scelerisque lacus. Phasellus luctus mattis venenatis. Mauris vel lorem molestie,
+							finibus augue in, scelerisque leo. Sed scelerisque, nulla a imperdiet pharetra, urna metus porta enim, at tincidunt nisl tellus nec purus. Mauris
+							neque velit, laoreet
+				</div>
+				<!--  the main visualization that will be updated based on the user's scrolling behavior-->
+				<div class="fixed w-3/4 h-5/6 inline-block top-11 z-20" id="viz">
+					<svg id="chart" class="w-full h-full" viewBox="0 0 926 665" x="0px" y="0px"></svg>
+				</div>
+			</div>
+		</div>
+		<!--outro paragraph-->
+		<div class="relative z-20 bg-white px-32 pb-11 pt-24 mt-0 box-border">
+			<p class="block leading-5 text-sm text-slate-600">
+				The goal of this interactive tour has been merely to share some of the diverse applications of data science at Stitch Fix. To be sure, we had a
+				difficult time limiting the scope to the ten stories featured above - there are vastly more already in production and even more still being framed. Yet,
+				much of what we refer to as applied data science has long existed as a diverse body of elegant microeconomic theory. The use of these concepts outside
+				of textbooks has been inhibited historically by the lack of data and compute resources to apply them practically; a final bastion currently restricting
+				the concepts to mere theory has been people and culture (organizations are notoriously difficult to change). However, Stitch Fix seems to be relatively
+				free of such impediments. Perhaps the only thing special we’ve done is endow ourselves with rich data via a unique business model and then foster an
+				environment where a data scientists can be successful. From there, curiosity, creativity and the desire to have an impact pave the way for the rest.
+			</p>
+		</div>
+		<!--spacer to show intro-->
+		<div class="relative h-[100vh] -z-10"></div>
+		<!-- <div class="title z-20 drop-shadow-sm">
+			
 		</div>
 		<div class="main z-10 bg-white drop-shadow-sm" id="frame">
 			<section>
@@ -55,17 +125,15 @@
 						placerat sit amet, elementum eget dui.
 					</p>
 				</div>
-				<div class="inline fixed top-0 right-0 w-1/2 h-full" id="chart">
-					<svg class="w-full h-full">
-						<g class="bars"></g>
-					</svg>
-				</div>
+				
 			</section>
 		</div>
-
+		<div class="inline fixed top-0 right-0 w-1/2 h-svh p-2 overflow-visible" id="chart">
+			<svg id="viz" class="w-full h-full translate-y-1/2 overflow-visible"></svg>
+		</div>
 		<div class="fixed top-0 flex flex-col justify-center items-center bg-slate-50 -z-10 min-h-screen max-h-screen h-full w-full text-slate-600" id="frame2">
 			<h1 class="text-4xl text-slate-600">A Final Message Can Go Here</h1>
 			<p class="text-sm text-slate-400">Or you can add another section of visualizations and linked text</p>
-		</div>
+		</div> -->
 	</body>
 </html>

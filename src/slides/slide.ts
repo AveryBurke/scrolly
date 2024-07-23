@@ -1,6 +1,6 @@
 import { Selection } from "d3-selection";
 import { visulizations } from "./visualizations";
-import { pizzaData } from "../utils/pizzaData";
+import { pizzaData } from "../static/pizzaData";
 import { barChart } from "../visulizations/barChart";
 import { pizzaChart } from "../visulizations/pizzaChart";
 import { debounce } from "lodash";

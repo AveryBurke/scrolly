@@ -8,7 +8,7 @@
 	--scroll: 0;
 	--scrollThreshold: 30;
 	--firstPageScrollPercentage: calc(min(var(--scroll), 100));
-	--finalPageScrollPercentage: calc(max(var(--scroll) - 575, 0));
+	--finalPageScrollPercentage: calc(max(var(--scroll) - 510, 0));
 }
 
 /* Reset default styles */
@@ -27,7 +27,7 @@ body {
 	padding-bottom: 25vh;
 }
 
-.title {	
+.title {
 	position: fixed;
 	display: flex;
 	flex-direction: column;
@@ -50,7 +50,6 @@ body {
 	align-items: center;
 	justify-content: center;
 }
-
 .caption {
 	box-sizing: border-box;
 	width: calc(100% - 40px);
@@ -58,8 +57,13 @@ body {
 	margin: auto auto 80vh 5vw;
 	color: rgb(100 116 139);
 	transition: color 0.25s;
-	height: 25vh;
+	height: 10vh;
 	transition: all 0.25s;
 	opacity: 0;
 }
 
+.intro-area-spacer {
+	position: relative;
+	height: calc(100vh);
+	z-index: -1;
+}

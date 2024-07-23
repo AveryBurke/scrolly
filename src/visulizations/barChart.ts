@@ -1,4 +1,6 @@
-import { BaseType, select, Selection } from "d3-selection";
+import { select, Selection } from "d3-selection";
+import "d3-transition";
+import { update } from "lodash";
 export function barChart() {
 	// All options that should be accessible to caller
 	let data: number[] = [],
@@ -36,10 +38,10 @@ export function barChart() {
 					.append("path")
 					.attr("pointer-events", "all")
 					.on("mouseover", function () {
-						select(this).transition().duration(200).style("fill", "orange");
+						select(this).transition().duration(0).style("fill", "orange");
 					})
 					.on("mouseout", function () {
-						select(this).transition().duration(200).style("fill", fillColor);
+						select(this).transition().duration(0).style("fill", fillColor);
 					})
 					.attr("class", "bar")
 					.attr("d", (d, i) => `M ${boundingRect.width} ${i * barSpacing} h 0 v ${barHeight} h 0 z`)
@@ -64,8 +66,8 @@ export function barChart() {
 					.attr("width", width)
 					.selectAll("path.bar")
 					.data(data)
-					.transition("width")
-					.duration(200)
+					.transition()
+					.duration(100)
 					.attr("d", (d, i) => `M ${boundingRect.width} ${i * barSpacing} h -${d * widthScale} v ${barHeight} h ${d * widthScale} z`);
 			};
 
@@ -88,25 +90,17 @@ export function barChart() {
 					.selectAll("path.bar")
 					.data(data)
 					.transition()
-					.duration(200)
+					.duration(0)
 					.attr("d", (d, i) => `M ${boundingRect.width} ${i * barSpacing} h -${d * widthScale} v ${barHeight} h ${d * widthScale} z`);
 			};
 
 			updateFillColor = function () {
-				console.log("fillColor", fillColor);
 				svg.selectAll("path.bar").data(data).transition().style("fill", fillColor);
 			};
 
 			exit = function () {
-				svg
-					.selectAll("path.bar")
-					.data(data)
-					.transition("exit")
-					.duration(200)
-					.attr("d", (d, i) => `M ${boundingRect.width} ${i * barSpacing} h 0 v ${barHeight} h 0 z`)
-					.remove()
-					.end()
-					.then(() => svg.remove());
+				width = 0;
+				updateWidth();
 			};
 
 			//init

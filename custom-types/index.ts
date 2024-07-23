@@ -102,6 +102,25 @@ declare global {
 	 */
 	type Slide = BarSlide | PizzaSlide | CircleSlide;
 
+	interface Frame {
+		/** acction to preform while scrolling down as the intersection ratio increases */
+		onEnterFromAbove: (chart: ReturnType<typeof barChart>, value: number) => void,
+		/** action to preform while scrolling down as the intersection ratio decreases */
+		onExitToAbove: (chart: ReturnType<typeof barChart>, value: number) => void,
+		/** action to preform while scrolling up as the intersection ratio increases */
+		onEnterFromBelow: (chart: ReturnType<typeof barChart>, value: number) => void,
+		/** action to preform while scrolling up as the intersection ratio decreases */
+		onExitToBelow: (chart: ReturnType<typeof barChart>, value: number) => void,
+        /** action to preform on leaving through the bottom of the frame */
+        onCrossingBellowWhileScrollingDown: (chart: ReturnType<typeof barChart>, value: number) => void,
+        /** action to preform on leaving through the top of the frame */
+        onCrossingAboveWhileScrollingUp: (chart: ReturnType<typeof barChart>, value: number) => void,
+        /** action to preform on entering through the bottom of the frame */
+        onCrossingBellowWhileScrollingUp: (chart: ReturnType<typeof barChart>, value: number) => void,
+        /** action to preform on entering through the top of the frame */
+        onCrossingAboveWhileScrollingDown: (chart: ReturnType<typeof barChart>, value: number) => void,
+	}
+
     interface Food {
         type: "fruit" | "vegetable";
         name: string;

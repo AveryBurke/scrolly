@@ -5,7 +5,6 @@ import { easeQuadIn } from "d3-ease";
 import { pallet } from "../utils/pallet";
 import makeSafeForCSS from "../utils/safeCss";
 
-
 interface Arc {
 	innerRadius: number;
 	outerRadius: number;
@@ -17,7 +16,7 @@ interface Arc {
 }
 
 //TODO: add exit transition
- 
+
 /**
  * Create a pizza chart
  * @returns a pizza chart
@@ -113,7 +112,7 @@ export function pizzaChart() {
 						return sliceColors[slice][ringSet.indexOf(ring)];
 					})
 					.end()
-                    .catch(d => console.log(d))
+					.catch((d) => console.log(d))
 					.then(() => {
 						arcs.each(function (d) {
 							current[d.id] = d;
@@ -121,12 +120,12 @@ export function pizzaChart() {
 					});
 
 				arcs
-                .exit()
-                .each(function () {
-                    const id = select(this).attr("id");
-                    delete current[id];
-                })
-                .remove();
+					.exit()
+					.each(function () {
+						const id = select(this).attr("id");
+						delete current[id];
+					})
+					.remove();
 			};
 			updateRingColumn = function () {
 				ringValue = (d) => d[ringColumn];
@@ -158,7 +157,6 @@ export function pizzaChart() {
 				// const arcs = arcGroup.selectAll<SVGElement, Arc>("path.arc").data(arcData, function (d) {
 				// 	return d.id || this.id;
 				// });
-
 				// // arcs
 				// // 	.transition()
 				// // 	.duration(300)
@@ -175,10 +173,9 @@ export function pizzaChart() {
 				// // 		return sliceColors[slice][ringSet.indexOf(ring)];
 				// // 	})
 				// // 	// .end()
-                // //     // .catch(d => console.log(d))
-
-                // //     arcs.remove();
-                //     // .then(() => arcs.remove())
+				// //     // .catch(d => console.log(d))
+				// //     arcs.remove();
+				//     // .then(() => arcs.remove())
 			};
 
 			function updateMetrics() {
@@ -209,11 +206,11 @@ export function pizzaChart() {
 					})
 				);
 			}
-		});
 
-		// init
-		updateData();
-		updateData();
+			// init
+			updateData();
+			updateData();
+		});
 	}
 
 	chart.data = function (value: any[]) {
