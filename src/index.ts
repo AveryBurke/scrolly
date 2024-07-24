@@ -1,9 +1,10 @@
-import { scroller } from "./lib/scroller";
+// import { scroller } from "./lib/scroller";
+import { scrolly } from "./lib/srcolly";
 import { SmoothScroll } from "./utils/smoothScroll";
 import { setScrollPercent } from "./utils/setScrollPercent";
 import "./style.css";
 
-// listen for scroll events and set css variable for paraallax effects
+// listen for scroll events and set css variable for parallax effects
 window.addEventListener("scroll", setScrollPercent);
 window.addEventListener("resize", setScrollPercent);
 
@@ -13,8 +14,7 @@ window.addEventListener("load", () => {
     new SmoothScroll(document.documentElement, 100, 10);
 	// set the scroll percent or any parallax effects
     setScrollPercent();
-    // initialize the scroller observer
-	scroller();
+	scrolly(document.documentElement);
 });
 
 
