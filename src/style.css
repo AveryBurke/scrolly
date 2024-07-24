@@ -2,6 +2,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Variables */
+:root {
+	/* scroll is set by a listener */
+	--scroll: 0;
+	--scrollThreshold: 30;
+	/* --firstPageScrollPercentage: calc(min(var(--scroll), 100));
+	--finalPageScrollPercentage: calc(max(var(--scroll) - 510, 0)); */
+}
+
 /* Reset default styles */
 html,
 body {
@@ -9,12 +18,17 @@ body {
 	padding: 0;
 }
 
-/* Add your custom styles here */
+.main {
+	transition: all 0.3s;
+	/* translate: 0% calc(-1% * (max(var(--finalPageScrollPercentage), 5) - 5) * (100 / (100 - 5))); */
+	padding-bottom: 25vh;
+}
 
 #frame {
     height: 100vh;
 	width: 100%;
-	overflow: auto;
+	background-color: #f8fafc;
+	/* translate: 0% calc(-1% * (max(var(--firstPageScrollPercentage), var(--scrollThreshold)) - var(--scrollThreshold)) * (100 / (100 - var(--scrollThreshold)))); */
 }
 
 .background {
