@@ -13,12 +13,14 @@ export function barChart() {
 		width = 900,
 		height = 200,
 		padding = 1,
+		rotate = 0,
 		fillColor = "steelblue",
 		// update handlers, called when the corresponding value changes
 		updateData: () => void,
 		updateWidth: () => void,
 		updateHeight: () => void,
 		updatepadding: () => void,
+		updateRotate: () => void,
 		updateFillColor: () => void,
 		// exit handler
 		exit: () => void;
@@ -28,10 +30,9 @@ export function barChart() {
 			let barSpacing = height / data.length,
 				barHeight = barSpacing - padding,
 				maxValue = Math.max(...data),
-				widthScale = width / maxValue,
-				boundingRect = select(this).node()!.getBoundingClientRect();
-			let svg = select(this);
+				widthScale = width / maxValue;
 
+			let svg = select(this);
 			updateData = function () {
 				barSpacing = height / data.length;
 				barHeight = barSpacing - padding;
@@ -50,15 +51,16 @@ export function barChart() {
 						select(this).transition().duration(200).style("fill", fillColor);
 					})
 					.attr("class", "bar")
-					.attr("d", (d, i) => `M ${boundingRect.width} ${i * barSpacing} h 0 v ${barHeight} h 0 z`)
+					.attr("d", (d, i) => `M ${width} ${i * barSpacing} h 0 v ${barHeight} h 0 z`)
+					.attr("transform", `rotate(${rotate}, ${width / 2}, ${height / 2})`)
 					.style("fill", fillColor);
 
-				bars.transition().attr("d", (d, i) => `M ${boundingRect.width} ${i * barSpacing} h -${d * widthScale} v ${barHeight} h ${d * widthScale} z`);
+				bars.transition().attr("d", (d, i) => `M ${width} ${i * barSpacing} h -${d * widthScale} v ${barHeight} h ${d * widthScale} z`);
 
 				bars
 					.exit()
 					.transition()
-					.attr("d", (d, i) => `M ${boundingRect.width} ${i * barSpacing} h 0 v ${barHeight} h 0 z`)
+					.attr("d", (d, i) => `M ${width} ${i * barSpacing} h 0 v ${barHeight} h 0 z`)
 					.remove();
 			};
 
@@ -69,7 +71,7 @@ export function barChart() {
 					.selectAll("path.bar")
 					.data(data)
 					.transition()
-					.attr("d", (d, i) => `M ${boundingRect.width} ${i * barSpacing} h -${d * widthScale} v ${barHeight} h ${d * widthScale} z`);
+					.attr("d", (d, i) => `M ${width} ${i * barSpacing} h -${d * widthScale} v ${barHeight} h ${d * widthScale} z`);
 			};
 
 			updateHeight = function () {
@@ -80,7 +82,7 @@ export function barChart() {
 					.selectAll("path.bar")
 					.data(data)
 					.transition()
-					.attr("d", (d, i) => `M ${boundingRect.width} ${i * barSpacing} h -${d * widthScale} v ${barHeight} h ${d * widthScale} z`);
+					.attr("d", (d, i) => `M ${width} ${i * barSpacing} h -${d * widthScale} v ${barHeight} h ${d * widthScale} z`);
 			};
 
 			updatepadding = function () {
@@ -90,12 +92,18 @@ export function barChart() {
 					.selectAll("path.bar")
 					.data(data)
 					.transition()
-					.attr("d", (d, i) => `M ${boundingRect.width} ${i * barSpacing} h -${d * widthScale} v ${barHeight} h ${d * widthScale} z`);
+					.attr("d", (d, i) => `M ${width} ${i * barSpacing} h -${d * widthScale} v ${barHeight} h ${d * widthScale} z`);
 			};
+
+			updateRotate = function () {
+				svg.selectAll("path.bar").data(data).transition().attr("transform", (d, i) => `rotate(${rotate/i * Math.E}, ${width / 2}, ${height / 2})`);
+			}
 
 			updateFillColor = function () {
 				svg.selectAll("path.bar").data(data).transition().style("fill", fillColor);
 			};
+
+			
 
 			exit = function () {
 				width = 0;
@@ -127,8 +135,8 @@ export function barChart() {
 	};
 
 	/**
-	 * set and update barchart's width. 
-	 * Since this is a horizontal barchart you''ll use this most often 
+	 * set and update barchart's width.
+	 * Since this is a horizontal barchart you''ll use this most often
 	 * @param newWidth the width of the barchart
 	 * @returns the barChart
 	 */
@@ -168,6 +176,13 @@ export function barChart() {
 	chart.fillColor = function (newFill: string) {
 		fillColor = newFill;
 		if (typeof updateFillColor === "function") updateFillColor();
+		return chart;
+	};
+
+	/** rotate the bars around the center of the group */
+	chart.rotate = function (newRotate: number) {
+		rotate = newRotate;
+		if (typeof updateRotate === "function") updateRotate();
 		return chart;
 	};
 

@@ -1,5 +1,5 @@
 // import { scroller } from "./lib/scroller";
-import { scrolly } from "./lib/srcolly";
+import { scrolly } from "./srcolly";
 import { SmoothScroll } from "./utils/smoothScroll";
 import { setScrollPercent } from "./utils/setScrollPercent";
 import "./style.css";
@@ -11,7 +11,7 @@ window.addEventListener("resize", setScrollPercent);
 // listen for load event to initialize the smooth scroll, set the scroll percent and initialize the scroller observer
 window.addEventListener("load", () => {
     // smooth the scroll
-    new SmoothScroll(document.documentElement, 100, 10);
+    new SmoothScroll(document.documentElement, 100, 8);
 	// set the scroll percent or any parallax effects
     setScrollPercent();
 	scrolly(document.documentElement);

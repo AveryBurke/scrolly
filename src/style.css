@@ -67,3 +67,8 @@ body {
 	height: calc(100vh);
 	z-index: -1;
 }
+
+.active {
+	border-left: .4rem solid #f6ad55;
+	padding-left: .6rem;
+}

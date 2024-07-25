@@ -25,12 +25,13 @@
 			<div class="relative z-30 pt-1 pr-0 pl-3 w-full max-w-[calc((110px +(100% - 110px)* 0.5) +(100vh - 45px)* 926 / 665)]">
 				<!-- topics: a guid along the side of the page to highleght which top is currentlly in view-->
 				<div class="w-1/4 top-1 relative inline-block z-20" id="sections">
-					<section class="step mt-64 pl-1 opacity-0" data-id="barChart">
+					<section class="step mt-64" data-id="spacer"></section>
+					<section class="step mt-24 pl-4" data-id="barChart">
 						<p class="block leading-5 text-sm text-slate-600">
 							The bar chart on the right is a simple example of an updatable D3.js visualization. The user's scrolling behavior controls this chart's actions
 							through update methods. These methods can change the height and color of the bars or modify the chart's data.
 					</section>
-					<section class="step mt-40 pl-1 opacity-0" data-id="1">
+					<section class="step mt-40 pl-4" data-id="1">
 						<p class="block leading-5 text-sm text-slate-600">
 							When entered, each section's controller updates the chart's data and the color of the bars. If you entered this section from above, the section
 							controller updated the chart's data and color. If you entered this section from below, the current section's controller initialized a new bar
@@ -38,7 +39,7 @@
 							scrolling up, the section controller will clean up and remove the bar chart.
 						</p>
 					</section>
-					<section class="step mt-40 pl-1 opacity-0" data-id="2">
+					<section class="step mt-40 pl-4" data-id="2">
 						<p class="block leading-5 text-sm text-slate-600">
 							Donec commodo sapien enim, et iaculis neque sollicitudin iaculis. Etiam consequat suscipit quam, a blandit mauris pharetra accumsan. Integer
 							dignissim gravida rutrum. Nulla facilisi. Sed vitae convallis enim. Mauris et vehicula ex. Aliquam mauris tellus, tempor quis ante ac, rutrum
@@ -46,7 +47,7 @@
 							Cras volutpat dui nec iaculis tincidunt. Maecenas malesuada libero sed porta tincidunt.
 						</p>
 					</section>
-					<section class="step mt-40 pl-1 opacity-0" data-id="3">
+					<section class="step mt-40 pl-4" data-id="3">
 						<p class="block leading-5 text-sm text-slate-600">
 							Suspendisse varius odio enim, eget vehicula odio placerat at. Aenean suscipit purus nulla, ac faucibus ex semper a. Nulla leo ante, ultrices vitae
 							viverra sed, semper nec eros. Phasellus id facilisis est, et scelerisque lacus. Phasellus luctus mattis venenatis. Mauris vel lorem molestie,
@@ -54,8 +55,8 @@
 							neque velit, laoreet
 				</div>
 				<!--  the main visualization that will be updated based on the user's scrolling behavior-->
-				<div class="fixed w-3/4 h-5/6 inline-block top-11 z-20" id="viz">
-					<svg id="chart" class="w-full h-full" viewBox="0 0 926 665" x="0px" y="0px"></svg>
+				<div class="fixed w-3/4 h-5/6 mt-10 inline-block top-11 z-20 p-2" id="viz">
+					<svg id="chart" class="w-full h-full aspect-square overflow-visible" viewBox="0 0 926 665" x="0px" y="0px"></svg>
 				</div>
 			</div>
 		</div>

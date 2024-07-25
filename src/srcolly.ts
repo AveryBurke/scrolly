@@ -1,20 +1,20 @@
 import { select } from "d3-selection";
-import { scrollViz } from "../scrollViz";
+import { scrollViz } from "./scrollViz";
 import { dispatch } from "d3-dispatch";
 import { bisect, ticks } from "d3-array";
 import "d3-transition";
 
 export const scrolly = (root: Element) => {
-	let activeId = "barChart",
-		previousId = "barChart",
-		direction: "downInc" | "downDec" | "upInc" | "upDec" = "downInc",
-		missingFrameTolerance = 4;
+	let activeId = "",
+		direction: "up" | "down" = "down",
+		missingFrameTolerance = 20;
 
 	const vis = scrollViz().activeId(activeId);
 
 	select("#chart").call(vis);
 
-	setupProgressObserver(root, "0px 0px 0px 0px ", 100);
+	// observer progress through the middle 60% of the viewport
+	setupProgressObserver(root, "-30% 0px -30% 0px ", 100);
 	setupIntersectionObserver(root);
 
 	/** Observers */
@@ -45,39 +45,30 @@ export const scrolly = (root: Element) => {
 					target,
 				} = entry;
 
-				// if (!isIntersecting) return;
+				// if we want to fade elements in and out we can use the intersection ratio
+				(target as HTMLDivElement).style.opacity = (currentRatio + .3).toString();
 
-				// fade the element in and out according to visibility on the screen
-				(target as HTMLDivElement).style.opacity = currentRatio.toString();
-				console.log(
-					"target id ",
-					target.getAttribute("data-id"),
-					" current ratio ",
-					currentRatio,
-					" previous ratio ",
-					previousRatio,
-					" target is active ",
-					activeId === target.getAttribute("data-id"),
-					" active id ",
-					activeId
-				);
-				if (isIntersecting && activeId !== target.getAttribute("data-id")) return;
+				if (!isIntersecting) return;
+				if (!(target as HTMLDivElement).classList.contains("active")) return;
+
 
 				// Scrolling down/up
 				if (currentY < previousY) {
+					direction = "down";
 					if (currentRatio > previousRatio && isIntersecting) {
-						// console.log("Scrolling down enter");
+						// scrolling down enter
 						vis.direction("downInc");
 					} else {
-						// console.log("Scrolling down leave");
+						// scrolling down leave
 						vis.direction("downDec");
 					}
 				} else if (currentY > previousY && isIntersecting) {
+					direction = "up";
 					if (currentRatio < previousRatio) {
-						// console.log("Scrolling up leave");
+						// scrolling up leave
 						vis.direction("upDec");
 					} else {
-						// console.log("Scrolling up enter");
+						// scrolling up enter
 						vis.direction("upInc");
 					}
 				}
@@ -91,8 +82,7 @@ export const scrolly = (root: Element) => {
 					Math.abs(previousBisectIndex - currentBisectIndex) > missingFrameTolerance
 						? ticks(previousRoundedRatio, roundedRatio, Math.abs(previousBisectIndex - currentBisectIndex))
 						: [roundedRatio]; // find the ticks between the previous and current ratio
-				// console.log("rounded ratio ", roundedRatio, " previous ratio ", previousRoundedRatio, " scrollTicks ", scrollTicks);
-				vis.data(scrollTicks);
+				vis.data(scrollTicks);  
 
 				previousY = currentY;
 				previousRatio = currentRatio;
@@ -119,11 +109,11 @@ export const scrolly = (root: Element) => {
 			(entries) => {
 				entries.forEach((entry) => {
 					const { isIntersecting, target, intersectionRatio } = entry;
-					console.log(target.getAttribute("data-id") + " isIntersecting ", isIntersecting, " intersectionRatio ", intersectionRatio);
 					if (isIntersecting && activeId !== target.getAttribute("data-id")) {
-						console.log("activate " + target.getAttribute("data-id"));
-						vis.activeId(target.getAttribute("data-id"));
+						root.querySelector<HTMLDivElement>(".active")?.classList.remove("active");
+						(target as HTMLDivElement).classList.add("active");
 						activeId = target.getAttribute("data-id");
+						vis.activeId(activeId);
 					}
 				});
 			},

@@ -1,8 +1,9 @@
 import { Selection, select } from "d3-selection";
-import { barChart } from "./visulizations/barChart";
-import { barChartData } from "./static/barChartData";
+import { functions } from "./functions";
 import "d3-transition";
-import { functions } from "lodash";
+import { barChart } from "./visulizations/barChart";
+import { exit } from "process";
+import { findSourceMap } from "module";
 
 // manage all the visualizations in this presentation
 export function scrollViz() {
@@ -10,97 +11,121 @@ export function scrollViz() {
 	let data: number[] = [],
 		activeFunction = "",
 		direction: "downInc" | "downDec" | "upInc" | "upDec" = "downInc",
-		updateDirection: () => void,
+		scroll: number[] = [],
 		// update handlers, called when the corresponding option changes
+		updateScroll: () => void,
+		updateDirection: () => void,
 		updateData: () => void,
 		updateActiveId: () => void;
 
 	function chart(selection: Selection<SVGElement, unknown, HTMLElement, any>) {
 		selection.each(function () {
-        
 			const { width, height } = select(this).node()!.getBoundingClientRect();
-
-			// setup functions and associated groups
-			const barGroup = select(this)
-				.append("g")
-				.attr("class", "bar-group")
-				.attr("transform", `translate(${width}, ${height / 2})`)
-				.attr("opacity", 0);
-
-			let funcitons = {
-				barChart: {
-					function: barChart().data(barChartData[0]).width(width),
-					group: barGroup,
-				},
-			};
-			// init funcitons
-			Object.keys(funcitons).forEach((key) => {
-				// call the function and append the group to the selection
-				funcitons[key as "barChart"].group.call(funcitons[key as "barChart"].function);
-			});
-
 			let previousActiveFunction = "";
 
-			
-			updateData = function() {
-                // console.log('updating data ', data);
-				switch (activeFunction) {
-					case "barChart":
+			// initalize funcitons
+			Object.keys(functions).forEach((key) => {
+				const { function: func, needsInit } = functions[key];
+				if (!needsInit) return;
+				functions[key].function = functions[key].function.width(width).height(height);
+				select(this).append("g").attr("id", functions[key].groupId).attr("opacity", 0).call(func);
+				functions[key].needsInit = false;
+			});
+
+			// controlers
+
+			const controlers = {
+				barChart: {
+					scroll: () => {
 						switch (direction) {
 							case "downInc":
-                                console.log('should increase opacity by ', data);
-								data.forEach((d) => {
-                                    funcitons[activeFunction as "barChart"].group.transition().attr("opacity", d * 100);
+								scroll.forEach((tick) => {
+									select(`#${functions.barChart.groupId}`).transition().attr("opacity", tick);
 								});
 								break;
 							case "downDec":
-								data.forEach((d) => {
-									funcitons[activeFunction as "barChart"].function.width(d * width);
-								});
+								// do something
 								break;
 							case "upInc":
-								// data.forEach((d) => {
-								// 	funcitons[activeFunction as "barChart"].function.width(d * width);
-								// });
+								// do something
 								break;
 							case "upDec":
-								data.forEach((d) => {
-                                    console.log('should decrease opacity by ', data);
-                                    funcitons[activeFunction as "barChart"].group.transition().attr("opacity", d * 100);
-								});
+								// do something
 								break;
 							default:
 								break;
 						}
-						break;
-					default:
-						break;
-				}
+					},
+					enter: (direction: "up" | "down") => {
+						switch (direction) {
+							case "down":
+								// do something
+								break;
+							case "up":
+								break;
+							default:
+								break;
+						}
+					},
+					exit: (direction: "up" | "down") => {
+						switch (direction) {
+							case "down":
+								// do something
+								break;
+							case "up":
+								// do something
+								break;
+							default:
+								break;
+						}
+					},
+				},
 			};
 
+			// update handlers
+			updateData = function () {};
 
-			// update the active index and hide the previous active function
-			updateActiveId = function() {
-				console.log("should switch from ", previousActiveFunction, " to ", activeFunction);
-				if (!funcitons[previousActiveFunction as "barChart"]) return;
-				if (activeFunction !== previousActiveFunction) {
-                    funcitons[previousActiveFunction as "barChart"].function.exit();
-					funcitons[previousActiveFunction as "barChart"].group.transition().attr("opacity", 0);
-                    funcitons[previousActiveFunction as "barChart"].group.lower();
-					activeFunction = previousActiveFunction;
+			updateScroll = function () {
+				if (controlers[activeFunction as "barChart"]) {
+					controlers[activeFunction as "barChart"].scroll();
 				}
-				if (!funcitons[activeFunction as "barChart"]) return;
-                funcitons[activeFunction as "barChart"].group.raise();
+
+				// update the activate new function and hide the previous active function
+				updateActiveId = function () {
+					console.log("should switch from ", previousActiveFunction, " to ", activeFunction);
+					if (activeFunction !== previousActiveFunction) {
+						if (functions[previousActiveFunction as "barChart"]) {
+							switch (direction) {
+								// the current function was tirggered by scrolling down
+								// so the previous function is above the current function
+								case "downInc":
+								case "downDec":
+									// functions[previousActiveFunction as "barChart"].group.transition().attr("opacity", 0);
+									break;
+								// the current function was tirggered by scrolling up
+								// so the previous function is below the current function
+								case "upInc":
+								case "upDec":
+									// functions[previousActiveFunction as "barChart"].group.transition().attr("opacity", 0);
+									break;
+								default:
+									break;
+							}
+						}
+						previousActiveFunction = activeFunction;
+					}
+
+					if (!functions[activeFunction as "barChart"]) return;
+					// functions[activeFunction as "barChart"].group.raise();
+				};
+
+				updateDirection = function () {
+					console.log("direction: ", direction);
+				};
+
+				// helper functions
 			};
-
-            updateDirection = function() {
-                console.log(direction);
-            };
-
-			// helper functions
 		});
-
-
 	}
 	// setters
 
@@ -120,6 +145,16 @@ export function scrollViz() {
 	chart.activeId = function (value: string) {
 		activeFunction = value;
 		if (typeof updateActiveId === "function") updateActiveId();
+		return chart;
+	};
+
+	/**
+	 *  scroll the active function by the ticks
+	 * @param ticks the ticks an ordered array of
+	 * */
+	chart.scroll = function (ticks: number[]) {
+		scroll = ticks;
+		if (typeof updateScroll === "function") updateScroll();
 		return chart;
 	};
 	return chart;
